@@ -142,7 +142,7 @@ Function CleanLogFiles($TargetFolder)
             Centeralize "Message is: $ErrorMessage `n" "red"
             Centeralize "Please Check your permissions! Maybe run Exchange mgmt shell as an admin? `n" "Yellow"
         }
-        if (confirm "Delete Motha Fucking Log files from? $TargetFolder")
+        if (confirm "Delete Log files from? $TargetFolder")
         {
             #foreach ($File in $Files)
             #    {
