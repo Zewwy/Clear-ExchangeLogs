@@ -42,7 +42,6 @@ $LogScript = @(
 )
 
 #Script Variables, known log locations of Exhange Server
-$days=0
 $IISLogPath="C:\inetpub\logs\LogFiles\"
 $ExchangeLoggingPath="C:\Program Files\Microsoft\Exchange Server\V15\Logging\"
 $ETLLoggingPath="C:\Program Files\Microsoft\Exchange Server\V15\Bin\Search\Ceres\Diagnostics\ETLTraces\"
@@ -126,12 +125,7 @@ function Centeralize()
 
 Function CleanLogFiles($TargetFolder)
 {
-  Centeralize "$TargetFolder`n" "Yellow"
-
     if (Test-Path $TargetFolder) {
-    #    $Now = Get-Date       #Get the current time and date
-    #    $LastWrite = $Now.AddDays(-$days)      #Line used to hold a date from the past
-    #   $Files = Get-ChildItem $TargetFolder -Include *.log,*.blg, *.etl -Recurse | Where {$_.LastWriteTime -le "$LastWrite"}
         try
         {
             $Files = Get-ChildItem $TargetFolder -Recurse -ErrorAction Stop # | Where-Object {$_.Name -like "*.log" -or $_.Name -like "*.blg" -or $_.Name -like "*.etl"}  | where {$_.lastWriteTime -le "$lastwrite"} | Select-Object FullName  
@@ -142,19 +136,15 @@ Function CleanLogFiles($TargetFolder)
             Centeralize "Message is: $ErrorMessage `n" "red"
             Centeralize "Please Check your permissions! Maybe run Exchange mgmt shell as an admin? `n" "Yellow"
         }
-        if (confirm "Delete Log files from? $TargetFolder")
+        if (confirm "Delete $TargetFolder logs? " "red")
         {
-            #foreach ($File in $Files)
-            #    {
-            #       $FullFileName = $File.FullName  
-            #       Write-Output "Deleting file $FullFileName" -ForegroundColor "yellow" | Out-File "DeletedLogs.log"
-            #       Remove-Item $FullFileName -ErrorAction SilentlyContinue | out-null
-            #    }
+
             Remove-item -Recurse $TargetFolder -ErrorAction SilentlyContinue
          }   
-       }
-Else {
-    Write-Host "The folder $TargetFolder doesn't exist! Check the folder path!" -ForegroundColor "red"
+    }
+    Else 
+    {
+        Write-Host "The folder $TargetFolder doesn't exist! Check the folder path!" -ForegroundColor "red"
     }
 }
 #endregion
